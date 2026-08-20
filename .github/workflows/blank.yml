@@ -22,7 +22,6 @@ jobs:
       - name: Check APK
         run: |
           ls -lah app/build/outputs/apk/debug/
-
       - name: Upload APK
         uses: actions/upload-artifact@v4
         with:
