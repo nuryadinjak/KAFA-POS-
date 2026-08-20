@@ -31,9 +31,9 @@ jobs:
           ls -la app
           echo "APP SRC:"
           find app/src -maxdepth 5 -type f -print
-
-      - name: Build APK
-        run: gradle tasks --all
+          
+          - name: Check Gradle Tasks
+  run: gradle tasks --all
 
       - name: Find APK
         run: find . -type f -name "*.apk" -print
