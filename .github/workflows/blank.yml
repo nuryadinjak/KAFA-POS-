@@ -1,4 +1,4 @@
-name: Build KAFA POS V12 APK
+name: KAFA POS V12 APK
 
 on:
   workflow_dispatch:
@@ -23,18 +23,34 @@ jobs:
       - name: Setup Gradle
         uses: gradle/actions/setup-gradle@v4
 
-      - name: Check project
+      - name: Verify Android module
         run: |
-          echo "ROOT:"
+          echo "=== ROOT ==="
+          pwd
           ls -la
-          echo "APP:"
+          echo "=== SETTINGS ==="
+          cat settings.gradle.kts
+          echo "=== APP ==="
           ls -la app
-          echo "APP SRC:"
-          find app/src -maxdepth 5 -type f -print
-          
-          - name: Check Gradle Tasks
-  run: gradle tasks --all
+          echo "=== APP GRADLE ==="
+          cat app/build.gradle.kts
 
+      - name: Build
+        run: gradle :app:assembleDebug --stacktrace
+
+      - name: Show APK
+        if: always()
+        run: |
+          echo "=== APK ==="
+          find . -type f -name "*.apk" -print
+
+      - name: Upload APK
+        uses: actions/upload-artifact@v4
+        if: success()
+        with:
+          name: KAFA-POS-V12-APK
+          path: app/build/outputs/apk/debug/app-debug.apk
+          if-no-files-found: error
       - name: Find APK
         run: find . -type f -name "*.apk" -print
 
