@@ -11,10 +11,10 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout repository
+      - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Setup Java 17
+      - name: Setup Java
         uses: actions/setup-java@v5
         with:
           distribution: temurin
@@ -23,18 +23,27 @@ jobs:
       - name: Setup Gradle
         uses: gradle/actions/setup-gradle@v4
 
-      - name: Show project files
+      - name: Check project
         run: |
-          echo "=== PROJECT ==="
+          echo "ROOT:"
           ls -la
-          echo "=== APP ==="
+          echo "APP:"
           ls -la app
-          echo "=== GRADLE FILES ==="
-          ls -la *.gradle.kts 2>/dev/null || true
+          echo "APP SRC:"
+          find app/src -maxdepth 5 -type f -print
 
       - name: Build APK
         run: gradle assembleDebug
 
+      - name: Find APK
+        run: find . -type f -name "*.apk" -print
+
+      - name: Upload APK
+        uses: actions/upload-artifact@v4
+        with:
+          name: KAFA-POS-V12-APK
+          path: "**/*.apk"
+          if-no-files-found: error
       - name: Check APK
         run: |
           echo "=== APK OUTPUT ==="
