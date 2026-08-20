@@ -19,12 +19,6 @@ jobs:
         with:
           distribution: temurin
           java-version: '17'
-      - name: Setup Gradle
-  uses: gradle/actions/setup-gradle@v4
-
-- name: Build APK
-  run: gradle assembleDebug
-  
       - name: Check APK
         run: |
           ls -lah app/build/outputs/apk/debug/
